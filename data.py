@@ -15,4 +15,3 @@ def read_data():
     return df
 
 
-
