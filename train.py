@@ -18,10 +18,16 @@ clf = tree.DecisionTreeClassifier()
 
 clf = clf.fit(X_train,y_train)
 
-tree.plot_tree(clf)
+# tree.plot_tree(clf)
 
 y_pred = clf.predict(X_test)
 y_test = y_test.to_numpy()
+
+print("The predictions are :", y_pred)
+print("Actual target value for these Iris :", y_test)
+
+# Evaluation 
+
 erreur = sum(abs(y_pred-y_test))/len(y_test) # on obient une erreur de 4.4%
 
 breakpoint()
