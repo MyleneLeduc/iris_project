@@ -4,7 +4,8 @@ Created on Fri Nov  6 14:12:45 2020
 
 @author: Mylène
 """
-
+import pdb
+import numpy as np
 from data import read_data
 import matplotlib.pyplot as plt
 import torch
@@ -15,6 +16,7 @@ from sklearn.model_selection import train_test_split
 
 
 df = read_data()
+categories = ['Iris_setosa','Iris_versicolor','Iris_virginica']
 
 df_setosa = df[df.species==0]
 df_versicolor = df[df.species==1]
@@ -23,7 +25,6 @@ df_virginica = df[df.species==2]
 
 X = df.loc[:,df.columns != 'species']
 y = df.species
-
 
 ### Visualisation des données
 
@@ -127,18 +128,22 @@ with torch.no_grad():
         y_hat = model.forward(val)
         preds.append(y_hat.argmax().item())
 
-correct = len(y_test)
-for i in range(len(y_test)):
-    if y_hat[i]==y_test[i]:
-        correct[i] = 1
-    else:
-        correct[i] = 0
+y_test = np.array(y_test)
+preds = np.array(preds)
+correct = (y_test == preds)
+correct = correct.astype(int)
 
-            
-breakpoint()
+erreur = correct.sum()/len(correct)
 
+### Apply the model to classify new
 
+unknown_iris = [4.0,3.3,1.7,0.5]
+#unknown_iris = unknown_iris.to_numpy()
+unknown_iris = torch.FloatTensor(unknown_iris)
 
+with torch.no_grad():
+    mod = model.forward(unknown_iris)
+    iris = mod.argmax().item()
+    print(categories[iris])
 
-
-
+pdb.set_trace()
